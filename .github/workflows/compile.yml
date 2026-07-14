@@ -24,6 +24,13 @@ jobs:
         arm-none-eabi-gcc -mthumb -mthumb-interwork -O2 -Wall -fno-strict-aliasing -mcpu=arm7tdmi main.c -o main.elf -specs=nosys.specs
         arm-none-eabi-objcopy -O binary main.elf neighbours.gba
 
+    - name: Fix GBA Header
+      run: |
+        # تحميل أداة تصحيح الترويسة وبنائها وتطبيقها على الـ ROM
+        wget https://raw.githubusercontent.com/devkitPro/tools/master/src/gbafix.c
+        gcc gbafix.c -o gbafix
+        ./gbafix neighbours.gba -t"NEIGHBOURS" -c"JGBX" -m"01" -r1
+
     - name: Upload GBA ROM
       uses: actions/upload-artifact@v4
       with:
