@@ -21,7 +21,7 @@ jobs:
 
     - name: Compile ROM
       run: |
-        arm-none-eabi-gcc -mthumb -mthumb-interwork -O2 -Wall -fno-strict-aliasing -mcpu=arm7tdmi -specs=gba.specs main.c -o main.elf
+        arm-none-eabi-gcc -mthumb -mthumb-interwork -O2 -Wall -fno-strict-aliasing -mcpu=arm7tdmi main.c -o main.elf -specs=nosys.specs
         arm-none-eabi-objcopy -O binary main.elf neighbours.gba
 
     - name: Upload GBA ROM
