@@ -1,0 +1,31 @@
+name: Build GBA ROM
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install devkitpro GBA toolchain
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gcc-arm-none-eabi build-essential libpng-dev
+
+    - name: Compile ROM
+      run: |
+        arm-none-eabi-gcc -mthumb -mthumb-interwork -O2 -Wall -fno-strict-aliasing -mcpu=arm7tdmi -specs=gba.specs main.c -o main.elf
+        arm-none-eabi-objcopy -O binary main.elf neighbours.gba
+
+    - name: Upload GBA ROM
+      uses: actions/upload-artifact@v4
+      with:
+        name: NeighboursFromHell-GBA
+        path: neighbours.gba
